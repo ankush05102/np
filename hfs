@@ -1,0 +1,169 @@
+HADOOP   COMMANDS 14
+
+
+hdoop@Ubuntu:~$ cd $HADOOP_HOME/sbin && ./start-all.sh
+WARNING: Attempting to start all Apache Hadoop daemons as hdoop in 10 seconds.
+WARNING: This is not a recommended production deployment configuration.
+WARNING: Use CTRL-C to abort.
+Starting namenodes on [localhost]
+Starting datanodes
+Starting secondary namenodes [Ubuntu]
+2023-07-01 19:04:06,354 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Starting resourcemanager
+Starting nodemanagers
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ jps
+4305 SecondaryNameNode
+4099 DataNode
+4966 Jps
+3980 NameNode
+4493 ResourceManager
+4622 NodeManager
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /
+2023-07-01 19:05:36,245 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 2 items
+drwxrwxr-x   - hdoop supergroup          0 2023-07-01 14:10 /tmp
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 13:17 /user
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -mkdir /prog2
+2023-07-01 19:29:03,172 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /
+2023-07-01 19:29:09,192 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 3 items
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 19:29 /prog2
+drwxrwxr-x   - hdoop supergroup          0 2023-07-01 14:10 /tmp
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -touchz /empty.txt
+2023-07-01 19:30:12,339 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /
+2023-07-01 19:30:30,192 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 4 items
+-rw-r--r--   1 hdoop supergroup          0 2023-07-01 19:30 /empty.txt
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 19:29 /prog2
+drwxrwxr-x   - hdoop supergroup          0 2023-07-01 14:10 /tmp
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 13:17 /user
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -copyFromLocal /home/hdoop/t1.txt /prog2/f1.txt
+2023-07-01 19:48:51,818 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /
+2023-07-01 19:49:00,897 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 4 items
+-rw-r--r--   1 hdoop supergroup          0 2023-07-01 19:30 /empty.txt
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 19:48 /prog2
+drwxrwxr-x   - hdoop supergroup          0 2023-07-01 14:10 /tmp
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 13:17 /user
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -put /home/hdoop/t1.txt /prog2/f2.txt
+2023-07-01 19:52:10,715 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /prog2
+2023-07-01 19:52:24,633 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 2 items
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:48 /prog2/f1.txt
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:52 /prog2/f2.txt
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -cat /prog2/f1.txt
+2023-07-01 19:53:01,436 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+abc
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -copyToLocal /prog2
+2023-07-01 19:53:35,397 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ ls
+distribute-exclude.sh  hadoop-daemons.sh  mr-jobhistory-daemon.sh  start-all.cmd      start-dfs.cmd        start-yarn.cmd  stop-all.sh       stop-dfs.sh         stop-yarn.sh    yarn-daemons.sh
+FederationStateStore   httpfs.sh          prog2                    start-all.sh       start-dfs.sh         start-yarn.sh   stop-balancer.sh  stop-secure-dns.sh  workers.sh
+hadoop-daemon.sh       kms.sh             refresh-namenodes.sh     start-balancer.sh  start-secure-dns.sh  stop-all.cmd    stop-dfs.cmd      stop-yarn.cmd       yarn-daemon.sh
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ cd /prog2
+bash: cd: /prog2: No such file or directory
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ cd prog2
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin/prog2$ ls
+f1.txt  f2.txt
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin/prog2$ cd ..
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -moveFromLocal prog2 /prog3
+2023-07-01 19:56:23,828 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /
+2023-07-01 19:56:42,475 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 5 items
+-rw-r--r--   1 hdoop supergroup          0 2023-07-01 19:30 /empty.txt
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 19:52 /prog2
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 19:56 /prog3
+drwxrwxr-x   - hdoop supergroup          0 2023-07-01 14:10 /tmp
+drwxr-xr-x   - hdoop supergroup          0 2023-07-01 13:17 /user
+
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -cp /prog2/f1.txt /prog3/f1_copy.txt
+2023-07-01 19:59:16,639 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -cat /prog3/f1_copy.txt
+2023-07-01 19:59:53,087 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+abc
+
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /prog3
+2023-07-01 20:00:20,238 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 3 items
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:56 /prog3/f1.txt
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:59 /prog3/f1_copy.txt
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:56 /prog3/f2.txt
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /prog2
+2023-07-01 20:00:58,195 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 2 items
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:48 /prog2/f1.txt
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:52 /prog2/f2.txt
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -mv /prog3/f1_copy.txt /prog2
+2023-07-01 20:02:01,668 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /prog2
+2023-07-01 20:02:11,133 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 3 items
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:48 /prog2/f1.txt
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:59 /prog2/f1_copy.txt
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:52 /prog2/f2.txt
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -ls /prog3
+2023-07-01 20:02:25,060 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Found 2 items
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:56 /prog3/f1.txt
+-rw-r--r--   1 hdoop supergroup          4 2023-07-01 19:56 /prog3/f2.txt
+
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -du /prog2
+2023-07-01 20:03:13,663 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+4  4  /prog2/f1.txt
+4  4  /prog2/f1_copy.txt
+4  4  /prog2/f2.txt
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -dus /prog2
+2023-07-01 20:04:01,218 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+dus: DEPRECATED: Please use 'du -s' instead.
+12  12  /prog2
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ hadoop fs -stat /prog2
+2023-07-01 20:04:43,239 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2023-07-01 14:32:02
+
+
+
+hdoop@Ubuntu:~/hadoop-3.2.4/sbin$ cd ~
+hdoop@Ubuntu:~$ pwd
+/home/hdoop
+
+hdoop@Ubuntu:~$ hadoop fs -appendToFile t1.txt t2.txt new.txt
+2023-07-01 20:10:37,202 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+hdoop@Ubuntu:~$ hadoop fs -cat new.txt
+2023-07-01 20:10:53,000 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+abc
+hi how are you
