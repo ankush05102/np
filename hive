@@ -1,0 +1,73 @@
+cd $HADOOP_HOME/sbin
+
+./start-all.sh
+
+jps
+
+hive
+
+//hadoop dfsadmin -safemode leave
+
+show databases;
+
+create database sales;
+
+use sales;
+
+create table s1(product string,price int, pt string,name string,city string, state string, country string);
+
+create table s2(product string,price int, pt string,name string,city string, state string, country string);
+
+desc s2
+
+LOAD DATA local INPATH '/home/hdoop/Downloads/s.csv' into table s2;
+
+select * from s2
+
+desc s2;
+
+select count(product),country from s2 group by country;
+
+select count(product),state from s2 group by state;
+
+desc s2;
+
+select name,product from s2 group by product;
+
+select * from s2 limit 5;
+
+select name,product from s2 group by name,product;
+
+select collect_list(name),product from s2 group by product;
+
+hive> create view mastercardview as
+    > select * from s2
+    > where pt="mastercard";
+
+select * from mastercardview;
+
+hive> create view mastercardview1 as
+    > select * from s2
+    > where pt="Mastercard";
+
+select * from mastercardview1;
+
+select * from s2 where city ="Seattle";
+
+desc s2;
+
+hive> SELECT COUNT(name) AS max_name
+    > from s
+    > where state="Ontario"
+    > group by state
+    > order by max_name desc
+    > limit 1;
+
+select count(product) from s where price between 1500 and 3600;
+
+select count(product) from s where price>1500 and price<3600;
+
+hive> select * from s
+    > where country="United States" and pt="Mastercard"
+    > limit 5;
+
